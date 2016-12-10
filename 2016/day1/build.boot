@@ -1,4 +1,5 @@
-(set-env! :resource-paths #{"src" "resources"})
+(set-env! :source-paths #{"src"}
+          :resource-paths #{"src"})
 
 (deftask run-one []
   (repl :init-ns 'problem-one))

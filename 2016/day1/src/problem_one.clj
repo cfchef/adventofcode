@@ -1,9 +1,9 @@
 (ns problem-one
   (:require [clojure.string :as str]))
 
-(def input (str/split (slurp "input.txt") #",\s+")) ; Read in and parse input
-(def position (atom [1 1]))                         ; Starting position
-(def direction (atom "N"))                          ; Starting direction
+(def input (str/split (slurp "src/input.txt") #",\s+")) ; Read in and parse input
+(def position (atom [1 1]))                             ; Starting position
+(def direction (atom "N"))                              ; Starting direction
 
 (defn move [blocks]
   (case @direction
