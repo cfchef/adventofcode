@@ -28,7 +28,7 @@
 (defn distance []
   (Math/abs (apply + (map dec @position))))
 
-(defn solve []
+(defn main []
   (dorun
     (map #(comp
       (println "Working on:" %)
@@ -38,4 +38,4 @@
       (println "New Direction:" @direction)
       (move (Integer/parseInt ((str/split % #"\D+") 1)))
       (println "New Position:" @position)) input))
-    (println (str "Distance to HQ: " (distance))))
+  (println (str "Distance to HQ: " (distance))))

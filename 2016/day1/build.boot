@@ -1,4 +1,7 @@
-(set-env! :resource-paths #{"src"})
+(set-env! :resource-paths #{"src" "resources"})
 
-(deftask solve []
+(deftask run-one []
   (repl :init-ns 'problem-one))
+
+(deftask run-two []
+  (repl :init-ns 'problem-two))
