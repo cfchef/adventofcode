@@ -15,11 +15,11 @@
       "S" (reset! position [(- (@position 0) 1) (@position 1)])
       "W" (reset! position [(@position 0) (- (@position 1) 1)]))
     (swap! points conj @position)
-    (let [point (filterv #(= (% 1) 2) (frequencies @points))]
-      (when (= (get-in point [0 1]) 2)
-        (when (zero? (count @target))
-          (println (str "Target: " @position))
-          (reset! target (get-in point [0 0])))))))
+    (let [point (first (filter #(= (% 1) 2) (frequencies @points)))]
+      (and (= (get-in point [1]) 2)
+           (zero? (count @target))
+            (do (println (str "Target: " @position))
+                (reset! target (get-in point [0])))))))
 
 (defn turn [point]
   (case point
