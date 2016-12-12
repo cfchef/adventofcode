@@ -1,41 +1,42 @@
 (ns problem-one
   (:require [clojure.string :as str]))
 
-(def input (str/split (slurp "src/input.txt") #",\s+")) ; Read in and parse input
-(def position (atom [1 1]))                             ; Starting position
-(def direction (atom "N"))                              ; Starting direction
+(def input (str/split (slurp "src/input.txt") #",\s+"))
 
-(defn move [blocks]
-  (case @direction
-    "N" (reset! position [(+ (@position 0) blocks) (@position 1)])
-    "E" (reset! position [(@position 0) (+ (@position 1) blocks)])
-    "S" (reset! position [(- (@position 0) blocks) (@position 1)])
-    "W" (reset! position [(@position 0) (- (@position 1) blocks)])))
+(defn move [dir pos blocks]
+  (case dir
+    "N" [(+ (pos 0) blocks) (pos 1)]
+    "E" [(pos 0) (+ (pos 1) blocks)]
+    "S" [(- (pos 0) blocks) (pos 1)]
+    "W" [(pos 0) (- (pos 1) blocks)]))
 
-(defn turn [point]
+(defn turn [dir point]
   (case point
-    "R" (case @direction
-      "N" (reset! direction "E")
-      "E" (reset! direction "S")
-      "S" (reset! direction "W")
-      "W" (reset! direction "N"))
-    "L" (case @direction
-      "N" (reset! direction "W")
-      "E" (reset! direction "N")
-      "S" (reset! direction "E")
-      "W" (reset! direction "S"))))
+    "R" (case dir
+      "N" "E"
+      "E" "S"
+      "S" "W"
+      "W" "N")
+    "L" (case dir
+      "N" "W"
+      "E" "N"
+      "S" "E"
+      "W" "S")))
 
-(defn distance []
-  (Math/abs (apply + (map dec @position))))
+(defn distance [pos]
+  (Math/abs (apply + (map dec pos))))
 
 (defn main []
-  (dorun
-    (map #(comp
-      (println "Working on:" %)
-      (println "Current Direction:" @direction)
-      (println "Current Position:" @position)
-      (turn ((str/split % #"\d+") 0))
-      (println "New Direction:" @direction)
-      (move (Integer/parseInt ((str/split % #"\D+") 1)))
-      (println "New Position:" @position)) input))
-  (println (str "Distance to HQ: " (distance))))
+  (let [position (atom [1 1])
+        direction (atom "N")]
+    (dorun
+      (map #(comp
+        (println "Working on:" %)
+        (println "Current Direction:" @direction)
+        (println "Current Position:" @position)
+        (reset! direction (turn @direction (subs % 0 1)))
+        (println "New Direction:" @direction)
+        (reset! position
+          (move @direction @position (Integer/parseInt (subs % 1))))
+        (println "New Position:" @position)) input))
+    (println (str "Distance to HQ: " (distance @position)))))
